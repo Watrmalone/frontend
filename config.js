@@ -1,0 +1,1 @@
+window.BACKEND_URL = 'https://menu-host.onrender.com'; // Your Render backend URL 
