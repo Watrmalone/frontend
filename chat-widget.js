@@ -11,7 +11,7 @@ const ChatWidget = {
     speaking: false,
     currentSpeech: null,
     isProcessing: false,
-    backendUrl: window.BACKEND_URL || 'https://menu-host.onrender.com',
+    backendUrl: window.BACKEND_URL || 'http://localhost:3000',
 
     // Initialize the chat widget
     init() {
