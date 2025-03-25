@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details - AI Menu</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="config.js"></script>
+    <script src="chat-widget.js"></script>
     <style>
         :root {
             --primary: #8B5E3C;    /* Dark Coffee */
@@ -390,8 +392,71 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="chat-widget.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="product-details">
+            <div class="product-image-container">
+                <!-- Product image will be inserted here -->
+            </div>
+            <div class="product-info">
+                <h1 class="product-name"></h1>
+                <div class="product-price"></div>
+                <p class="product-description"></p>
+                <div class="product-tags">
+                    <!-- Tags will be inserted here -->
+                </div>
+                <div class="nutritional-info">
+                    <h3>Nutritional Information</h3>
+                    <div class="nutritional-grid">
+                        <!-- Nutritional info will be inserted here -->
+                    </div>
+                </div>
+                <button class="order-button" id="orderButton">Order Now</button>
+            </div>
+        </div>
+
+        <div class="similar-products">
+            <h2>Similar Products</h2>
+            <div class="similar-grid">
+                <!-- Similar products will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+    <div class="order-popup">
+        <i class="fas fa-robot"></i>
+        <h2>Order Confirmed!</h2>
+        <p>Your order is being prepared by our robot chef. Please wait while we process your request.</p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+    </div>
+
     <script>
+        // Load product data
+        async function loadProductData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                console.error('No product ID provided');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${window.BACKEND_URL}/api/product/${productId}`);
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                const product = await response.json();
+                displayProduct(product);
+            } catch (error) {
+                console.error('Error loading product:', error);
+            }
+        }
+
         // Load product details when page loads
         async function loadProductDetails() {
             try {
@@ -400,7 +465,7 @@
                     throw new Error('No product ID found');
                 }
 
-                const response = await fetch(`http://localhost:3000/api/product/${productId}`);
+                const response = await fetch(`${window.BACKEND_URL}/api/product/${productId}`);
                 if (!response.ok) {
                     throw new Error('Failed to load product details');
                 }
@@ -465,7 +530,7 @@
         // Load similar products from the same category
         async function loadSimilarProducts(category) {
             try {
-                const response = await fetch('http://localhost:3000/api/menu');
+                const response = await fetch(`${window.BACKEND_URL}/api/menu`);
                 if (!response.ok) {
                     throw new Error('Failed to load menu data');
                 }
@@ -522,48 +587,6 @@
         // Load product details when page loads
         loadProductDetails();
     </script>
-</head>
-<body>
-    <div class="container">
-        <div class="product-details">
-            <div class="product-image-container">
-                <!-- Product image will be inserted here -->
-            </div>
-            <div class="product-info">
-                <h1 class="product-name"></h1>
-                <div class="product-price"></div>
-                <p class="product-description"></p>
-                <div class="product-tags">
-                    <!-- Tags will be inserted here -->
-                </div>
-                <div class="nutritional-info">
-                    <h3>Nutritional Information</h3>
-                    <div class="nutritional-grid">
-                        <!-- Nutritional info will be inserted here -->
-                    </div>
-                </div>
-                <button class="order-button" id="orderButton">Order Now</button>
-            </div>
-        </div>
-
-        <div class="similar-products">
-            <h2>Similar Products</h2>
-            <div class="similar-grid">
-                <!-- Similar products will be inserted here -->
-            </div>
-        </div>
-    </div>
-
-    <div class="overlay"></div>
-    <div class="order-popup">
-        <i class="fas fa-robot"></i>
-        <h2>Order Confirmed!</h2>
-        <p>Your order is being prepared by our robot chef. Please wait while we process your request.</p>
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-    </div>
-
     <script>
         // Order confirmation popup
         function showOrderConfirmation() {
