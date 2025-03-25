@@ -631,7 +631,7 @@
                     orderButton.innerHTML = 'Order Now';
                 }, 5000);
 
-                const response = await fetch('http://localhost:3000/api/order', {
+                const response = await fetch(`${window.BACKEND_URL}/api/order`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

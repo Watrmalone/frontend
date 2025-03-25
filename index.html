@@ -6,6 +6,7 @@
     <title>Pizza Categories - AI Menu</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="config.js"></script>
     <script src="gemini-chat/gemini-chat.js"></script>
     <style>
         :root {
@@ -786,15 +787,16 @@
         // Load menu data
         async function loadMenuData() {
             try {
-                const response = await fetch('http://localhost:3000/api/menu');
+                const response = await fetch(`${window.BACKEND_URL}/api/menu`);
                 if (!response.ok) {
-                    throw new Error(`Server responded with status: ${response.status}`);
+                    throw new Error('Failed to load menu data');
                 }
-                menuData = await response.json();
-                console.log('Menu data loaded successfully');
-                return menuData;
+                const data = await response.json();
+                console.log('Menu data loaded successfully:', data);
+                return data;
             } catch (error) {
                 console.error('Error loading menu data:', error);
+                showNotification('Failed to load menu data. Please try again.', 'error');
                 return null;
             }
         }
